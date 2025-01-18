@@ -1,0 +1,92 @@
+BEGIN_PARSER(MiniParser)
+import java.util.List
+import java.util.ArrayList
+public class MiniParser {
+}
+END_PARSER(MiniParser)
+
+SKIP: { " " | "\t" | "\r" | "\n" }
+TOKEN: {
+    <ADD : "+" > |
+    <SUB : "-" > |
+    <MUL : "*" > |
+    <NUM : (["0"-"9"])+ > |
+    <LBRACK : "{" > |
+    <RBRACK : "}" > |
+    <LPAREN : "(" > |
+    <RPAREN : ")" > |
+    <FN : "fn" > |
+    <LET : "let" > |
+    <COMMA : "," > |
+    <SEMICOLON : ";" > |
+    <RETURN : "return" > |
+    <IDENT : (["a"-"z", "A"-"Z"])+ >
+}
+
+List<FunDecl> Prog():
+  { List<FunDecl> ds; FunDecl d; }
+  {
+    (
+      d = FunDecl()
+      { ds.add(d); }
+    )*
+    { return ds; }
+  }
+
+FunDecl FunDecl():
+  { FunDecl d; Token t; List<String> ps; List<Statement> bd; }
+  {
+    (
+      <FN>
+      t = <IDENT>
+      <LPAREN>
+      (ps = Params())?
+      <RPAREN>
+      <LBRACK>
+      (b = Body())?
+      <RBRACK>
+      { d = new FunDecl(t.image, ps, bd); }
+    )
+    { return d; }
+  }
+
+List<String> Params():
+  { Token p; List<String> ps = new ArrayList<>(); }
+  {
+    (
+      p = <IDENT>
+      { ps.add(p.image); }
+    )
+    (
+      <COMMA>
+      p = <IDENT>
+      { ps.add(p.image); }
+    )*
+    { return ps }
+  }
+
+List<Statement> Body():
+  { Statement st; List<Statement> sts = new ArrayList<>(); }
+  {
+    (
+      st = Statement();
+      SEMICOLON
+      { sts.add(st); }
+    )*
+    { return sts; }
+  }
+
+Statement Statement():
+  {
+    {}
+
+
+
+
+
+
+
+
+
+
+

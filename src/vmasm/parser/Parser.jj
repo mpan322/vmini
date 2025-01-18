@@ -1,0 +1,105 @@
+PARSER_BEGIN(Parser)
+package vmasm.parser;
+import java.util.List;
+import java.util.ArrayList;
+import vmasm.parser.operand.*;
+public class Parser {
+    public static void main(String[] args) throws Exception {
+        Instruction i = new Parser(new java.io.StringReader(args[0])).Instruction();
+        System.out.println(i);
+    }
+}
+PARSER_END(Parser)
+
+SKIP: { " " | "\t" | "\r" | "\n" }
+TOKEN: { <ADD : "add"                       > }
+TOKEN: { <JUMP : "jmp"                      > }
+TOKEN: { <SUB : "sub"                       > }
+TOKEN: { <LABEL: "." (["a"-"z", "A"-"Z"])+  > }
+TOKEN: { <MUL : "mul"                       > }
+TOKEN: { <POP : "pop"                       > }
+TOKEN: { <PUSH : "push"                     > }
+TOKEN: { <DOL : "$"                         > }
+TOKEN: { <PER : "%"                         > }
+TOKEN: { <NUM : ("-")? (<DIG>)+             > }
+TOKEN: { <DIG : ["0"-"9"]                   > }
+
+List<Symbol> Prog():
+  { List<Symbol> s = new ArrayList<Symbol>(); Symbol l; }
+  {
+    (
+      (
+        ( l = Label() ) |
+        ( l = Instruction() )
+      )
+      { s.add(l); }
+    )*
+    <EOF>
+    { return s; }
+  }
+
+Label Label():
+  { Token l; }
+  {
+    (l = <LABEL> )
+    { return new Label(l.image); }
+  }
+
+JumpLabel JumpLabel() :
+  { Token l; }
+  {
+    ( l = <LABEL> )
+    { return new JumpLabel(l.image); }
+  }
+
+Instruction Instruction() :
+  { Instruction i; POperand a, b, r; }
+  {
+    (
+      ( <ADD> a = Value() b = Value() r = Reg()
+        { i = new Instruction(InstrType.ADD, a, b, r); } ) |
+      ( <SUB> a = Value() b = Value() r = Reg()
+        { i = new Instruction(InstrType.SUB, a, b, r); } ) |
+      ( <MUL> a = Value() b = Value() r = Reg()
+        { i = new Instruction(InstrType.MUL, a, b, r); } ) |
+      ( <PUSH> a = Value()
+        { i = new Instruction(InstrType.PUSH, a); } ) |
+      ( <POP> r = Reg()
+        { i = new Instruction(InstrType.POP, r); } ) |
+      ( <MOV> a = Value() r = Reg()
+        { i = new Instruction(InstrType.MOV, a, r); } ) |
+      ( <JUMP> a = JumpLabel()
+        { i = new Instruction(InstrType.JUMP, a); } )
+    )
+    { return i; }
+  }
+
+POperand Value() :
+  { POperand o; }
+  {
+    (
+      ( o = Reg() ) |
+      ( o = Const() )
+    )
+    { return o; }
+  }
+
+Const Const() :
+  { int v; }
+  {
+    (<DOL> v = Num() )
+    { return new Const(v); }
+  }
+
+Register Reg() :
+  { int v; }
+  {
+    (<PER> v = Num() )
+    { return new Register(v); }
+  }
+
+int Num() :
+   { Token n; }
+   { ( n = <NUM> ) { return Integer.parseInt(n.image); } }
+
+
