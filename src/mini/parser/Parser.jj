@@ -1,6 +1,9 @@
 PARSER_BEGIN(MiniParser)
+package mini.parser;
 import java.util.List;
 import java.util.ArrayList;
+import mini.parser.ast.*;
+import mini.parser.ast.expr.*;
 public class MiniParser {
 }
 PARSER_END(MiniParser)
@@ -16,7 +19,7 @@ TOKEN: {
 }
 
 List<FunDecl> Prog():
-  { List<FunDecl> ds; FunDecl d; }
+  { List<FunDecl> ds = new ArrayList<FunDecl>(); FunDecl d; }
   {
     (
       d = FunDecl() { ds.add(d); }
@@ -25,12 +28,12 @@ List<FunDecl> Prog():
   }
 
 FunDecl FunDecl():
-  { FunDecl d; Token t; List<String> ps; List<Statement> bd; }
+  {  Token t; List<String> ps = new ArrayList<String>(); List<Statement> bd; }
   {
     <FN>
     t = <IDENT>
-    "(" ps = Params() ")"
-    "{" b = Body() "}"
+    "(" (ps = Params())? ")"
+    "{" bd = Body() "}"
     { return new FunDecl(t.image, ps, bd); }
   }
 
@@ -54,7 +57,7 @@ List<Statement> Body():
   }
 
 Statement Statement():
-  { Token t; Expr e; }
+  { Token t; IExpr e; }
   {
     (
       t = <IDENT>
@@ -74,38 +77,39 @@ Statement Statement():
     )
   }
 
-Expr Expr():
-  { Expr a, b; Token n; }
+IExpr Expr():
+  { IExpr a, b; Token n; }
   {
     a = Term()
     (
-      "+" b = Expr() { return new Expr(ADD, a, b); }
-    | "-" b = Expr() { return new Expr(SUB, a, b); }
-    )
+      "+" b = Expr() { a = new BinaryExpr(BinaryExprType.ADD, a, b); }
+    | "-" b = Expr() { a = new BinaryExpr(BinaryExprType.SUB, a, b); }
+    )?
+    { return a; }
   }
 
-Expr Term():
-  { Expr a, b; }
+IExpr Term():
+  { IExpr a, b; }
   {
     a = Unary()
     (
-      "*" b = Term() { return new Expr(MUL, a, b); }
-    | "/" b = Term() { return new Expr(DIV, a, b); }
-    )
+      "*" b = Term() { a = new BinaryExpr(BinaryExprType.MUL, a, b); }
+    )?
+    { return a; }
   }
 
-Expr Unary():
-  { Expr a; }
+IExpr Unary():
+  { IExpr a; }
   {
-    "-" a = Elem() { return Expr(NEG, a); }
+    "-" a = Elem() { return new UnaryExpr(UnaryExprType.NEG, a); }
   | a = Elem()     { return a; }
   }
 
-Expr Elem():
-  { Token t; Expr a; }
+IExpr Elem():
+  { Token t; IExpr a; }
   {
-    t = <IDENT> { return new Expr(IDENT, t.image); }
-  | t = <NUM>   { return new Expr(NUM, Integer.parseInt(t.image)); }
+    t = <IDENT> { return new IdentExpr(t.image); }
+  | t = <NUM>   { return new NumExpr(Integer.parseInt(t.image)); }
   | "(" a = Expr() ")" { return a; }
   }
 

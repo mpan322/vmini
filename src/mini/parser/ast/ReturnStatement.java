@@ -1,4 +1,6 @@
 package mini.parser.ast;
 
-public class ReturnStatement {
+import mini.parser.ast.expr.IExpr;
+
+public record ReturnStatement(IExpr value) implements Statement {
 }

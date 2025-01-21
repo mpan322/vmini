@@ -112,7 +112,7 @@ public class TokenMgrError extends Error
     *
     *     "Internal Error : Please file a bug report .... "
     *
-    * from this method for such cases in the release version of your asm.parser.
+    * from this method for such cases in the release version of your parser.
     */
    public String getMessage() {
       return super.getMessage();
@@ -137,4 +137,4 @@ public class TokenMgrError extends Error
       this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason);
    }
 }
-/* JavaCC - OriginalChecksum=b9dcceb5b7fe51664de68e85da356159 (do not edit this line) */
+/* JavaCC - OriginalChecksum=394336bead6b500e4327911ae51f22da (do not edit this line) */

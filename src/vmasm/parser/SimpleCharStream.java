@@ -9,7 +9,7 @@ package vmasm.parser;
 
 public class SimpleCharStream
 {
-/** Whether asm.parser is static. */
+/** Whether parser is static. */
   public static final boolean staticFlag = true;
   static int bufsize;
   static int available;
@@ -473,4 +473,4 @@ public class SimpleCharStream
   }
 
 }
-/* JavaCC - OriginalChecksum=3bcd1704b71de9167d2c642f3f3c7555 (do not edit this line) */
+/* JavaCC - OriginalChecksum=ab2a1eb356217f3f1b7a21f0823c028c (do not edit this line) */

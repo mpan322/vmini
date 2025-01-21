@@ -54,6 +54,7 @@ public class Machine {
             int op = this.getNext();
             this.exec(op);
         }
+        System.out.println(Arrays.toString(registers));
     }
 
     private void exec(int op) {

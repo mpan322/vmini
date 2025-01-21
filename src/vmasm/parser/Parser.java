@@ -2,12 +2,8 @@
 package vmasm.parser;
 import java.util.List;
 import java.util.ArrayList;
-
-import vmasm.parser.symbol.InstrType;
-import vmasm.parser.symbol.Instruction;
-import vmasm.parser.symbol.Label;
-import vmasm.parser.symbol.Symbol;
 import vmasm.parser.operand.*;
+import vmasm.parser.symbol.*;
 public class Parser implements ParserConstants {
     public static void main(String[] args) throws Exception {
         Instruction i = new Parser(new java.io.StringReader(args[0])).Instruction();
@@ -21,6 +17,7 @@ public class Parser implements ParserConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ADD:
       case JUMP:
+      case MOV:
       case SUB:
       case LABEL:
       case MUL:
@@ -38,6 +35,7 @@ public class Parser implements ParserConstants {
         break;
       case ADD:
       case JUMP:
+      case MOV:
       case SUB:
       case MUL:
       case POP:
@@ -103,6 +101,12 @@ public class Parser implements ParserConstants {
       jj_consume_token(POP);
       r = Reg();
           i = new Instruction(InstrType.POP, r);
+      break;
+    case MOV:
+      jj_consume_token(MOV);
+      a = Value();
+      r = Reg();
+          i = new Instruction(InstrType.MOV, a, r);
       break;
     case JUMP:
       jj_consume_token(JUMP);
@@ -175,7 +179,7 @@ public class Parser implements ParserConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xfe0,0xfe0,0xee0,0x3000,};
+      jj_la1_0 = new int[] {0x1fe0,0x1fe0,0x1de0,0x6000,};
    }
 
   /** Constructor with InputStream. */
@@ -185,9 +189,9 @@ public class Parser implements ParserConstants {
   /** Constructor with InputStream and supplied encoding */
   public Parser(java.io.InputStream stream, String encoding) {
     if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static asm.parser.  ");
+      System.out.println("ERROR: Second call to constructor of static parser.  ");
       System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during asm.parser generation.");
+      System.out.println("       during parser generation.");
       throw new Error();
     }
     jj_initialized_once = true;
@@ -216,9 +220,9 @@ public class Parser implements ParserConstants {
   /** Constructor. */
   public Parser(java.io.Reader stream) {
     if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static asm.parser. ");
+      System.out.println("ERROR: Second call to constructor of static parser. ");
       System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during asm.parser generation.");
+      System.out.println("       during parser generation.");
       throw new Error();
     }
     jj_initialized_once = true;
@@ -243,9 +247,9 @@ public class Parser implements ParserConstants {
   /** Constructor with generated Token Manager. */
   public Parser(ParserTokenManager tm) {
     if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static asm.parser. ");
+      System.out.println("ERROR: Second call to constructor of static parser. ");
       System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during asm.parser generation.");
+      System.out.println("       during parser generation.");
       throw new Error();
     }
     jj_initialized_once = true;
@@ -313,7 +317,7 @@ public class Parser implements ParserConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[16];
+    boolean[] la1tokens = new boolean[17];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -327,7 +331,7 @@ public class Parser implements ParserConstants {
         }
       }
     }
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 17; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

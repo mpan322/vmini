@@ -1,4 +1,4 @@
-package mini.parser.ast;
+package mini.parser.ast.expr;
 
-public record UnaryExpr() implements IExpr {
+public record UnaryExpr(UnaryExprType tag, IExpr child) implements IExpr {
 }

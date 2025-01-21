@@ -1,4 +1,4 @@
 package mini.parser.ast;
 
-public interface IStatement {
+public sealed interface Statement permits ReturnStatement, LetStatement, AssignStatement {
 }

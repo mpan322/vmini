@@ -1,4 +1,6 @@
 package mini.parser.ast;
 
-public class AssignStatement {
+import mini.parser.ast.expr.IExpr;
+
+public record AssignStatement(String ident, IExpr value) implements Statement {
 }

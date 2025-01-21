@@ -3,6 +3,7 @@ package vmasm.parser;
 import java.util.List;
 import java.util.ArrayList;
 import vmasm.parser.operand.*;
+import vmasm.parser.symbol.*;
 public class Parser {
     public static void main(String[] args) throws Exception {
         Instruction i = new Parser(new java.io.StringReader(args[0])).Instruction();
@@ -14,6 +15,7 @@ PARSER_END(Parser)
 SKIP: { " " | "\t" | "\r" | "\n" }
 TOKEN: { <ADD : "add"                       > }
 TOKEN: { <JUMP : "jmp"                      > }
+TOKEN: { <MOV : "mov"                       > }
 TOKEN: { <SUB : "sub"                       > }
 TOKEN: { <LABEL: "." (["a"-"z", "A"-"Z"])+  > }
 TOKEN: { <MUL : "mul"                       > }

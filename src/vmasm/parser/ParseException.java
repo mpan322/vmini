@@ -6,7 +6,7 @@ package vmasm.parser;
  * This exception is thrown when parse errors are encountered.
  * You can explicitly create objects of this exception type by
  * calling the method generateParseException in the generated
- * asm.parser.
+ * parser.
  *
  * You can modify this class to customize your error reporting
  * mechanisms so long as you retain the public fields.
@@ -15,7 +15,7 @@ public class ParseException extends Exception {
 
   /**
    * This constructor is used by the method "generateParseException"
-   * in the generated asm.parser.  Calling this constructor generates
+   * in the generated parser.  Calling this constructor generates
    * a new object of this type with the fields "currentToken",
    * "expectedTokenSequences", and "tokenImage" set.  The boolean
    * flag "specialConstructor" is also set to true to indicate that
@@ -81,7 +81,7 @@ public class ParseException extends Exception {
 
   /**
    * This is a reference to the "tokenImage" array of the generated
-   * asm.parser within which the parse error occurred.  This array is
+   * parser within which the parse error occurred.  This array is
    * defined in the generated ...Constants interface.
    */
   public String[] tokenImage;
@@ -92,7 +92,7 @@ public class ParseException extends Exception {
    * "currentToken" and "expectedTokenSequences" to generate a parse
    * error message and returns it.  If this object has been created
    * due to a parse error, and you do not catch it (it gets thrown
-   * from the asm.parser), then this method is called during the printing
+   * from the parser), then this method is called during the printing
    * of the final stack trace, and hence the correct error message
    * gets displayed.
    */
@@ -195,4 +195,4 @@ public class ParseException extends Exception {
    }
 
 }
-/* JavaCC - OriginalChecksum=712dfdba530548671bae1f99b122fd53 (do not edit this line) */
+/* JavaCC - OriginalChecksum=6a96e1ddb02d8bda23304e9970a69d7a (do not edit this line) */

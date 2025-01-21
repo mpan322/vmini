@@ -1,4 +1,4 @@
-package mini.parser.ast;
+package mini.parser.ast.expr;
 
-public interface IExpr {
+public sealed interface IExpr permits BinaryExpr, IdentExpr, NumExpr, UnaryExpr {
 }

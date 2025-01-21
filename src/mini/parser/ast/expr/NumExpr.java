@@ -1,4 +1,4 @@
-package mini.parser.ast;
+package mini.parser.ast.expr;
 
-public record NumExpr() implements IExpr {
+public record NumExpr(int value) implements IExpr {
 }

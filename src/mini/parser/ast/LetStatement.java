@@ -1,4 +1,6 @@
 package mini.parser.ast;
 
-public class LetStatement {
+import mini.parser.ast.expr.IExpr;
+
+public record LetStatement(String ident, IExpr value) implements Statement {
 }
